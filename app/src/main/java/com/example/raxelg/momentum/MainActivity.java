@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     if (vibrator.hasAmplitudeControl()) {
-                        VibrationEffect effect = VibrationEffect.createWaveform(mVibratePattern, mAmplitudes, -1);
+                        VibrationEffect effect = VibrationEffect.createWaveform(mVibratePattern, mAmplitudes, 0);
                         vibrator.vibrate(effect);
                     }
                 }else{
