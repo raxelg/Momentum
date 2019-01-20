@@ -27,10 +27,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
     String provider;
 
-    //Hard-coded variables
-    long[] mVibratePattern = new long[]{0, 1000, 1000, 1000, 1000, 1000};
-    int[] mAmplitudes = new int[]{0, 25, 75, 125, 175, 255};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                              public void onClick(View v) {
                                                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                                      if (vibrator.hasAmplitudeControl()) {
-                                                         VibrationEffect effect = VibrationEffect.createWaveform(mVibratePattern, mAmplitudes, 0);
+                                                         VibrationEffect effect = VibrationEffect.createWaveform(new long[]{0, 1000, 1000, 1000, 1000, 1000}, new int[]{0, 25, 75, 125, 175, 255}, 0);
                                                          vibrator.vibrate(effect);
                                                      }
                                                  } else {
