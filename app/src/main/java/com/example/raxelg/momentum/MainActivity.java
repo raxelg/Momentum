@@ -41,9 +41,11 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     vibrator.vibrate(400);
                 }
-            }
+
         }
-        );
+
+        )
     }
 
+}
 }
