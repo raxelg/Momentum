@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Momentum</string>
     <string name="impulse">Impulse</string>
+    <string name="titleText">Pulse</string>
+    <string name="coordinateText">coordinates</string>
 </resources>
