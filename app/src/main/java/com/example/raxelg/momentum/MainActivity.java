@@ -18,10 +18,16 @@ import android.widget.Button;
 import android.os.Vibrator;
 import android.widget.TextView;
 
+import java.util.Random;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
     //Initial objects
     private Button vibrateButton;
+    private Button stopButton;
     private Vibrator vibrator;
     TextView textView;
     private LocationManager locationManager;
@@ -35,17 +41,67 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //Necessary object identification/authorization
         textView = findViewById(R.id.coordinateText);
         vibrateButton = findViewById(R.id.vibrateButton);
+        stopButton = findViewById(R.id.b_stop);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
+
+
+        /*    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }*/
+        //Location location = locationManager.getLastKnownLocation(provider);
+
+        stopButton.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                vibrator.cancel();
+            }
+        });
+
+
+
 
         //Button vibrates continuously
         vibrateButton.setOnClickListener(new Button.OnClickListener() {
                                              public void onClick(View v) {
                                                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                                      if (vibrator.hasAmplitudeControl()) {
-                                                         VibrationEffect effect = VibrationEffect.createWaveform(new long[]{0, 1000, 1000, 1000, 1000, 1000}, new int[]{0, 25, 75, 125, 175, 255}, 0);
-                                                         vibrator.vibrate(effect);
+
+                                                         //permission for location
+
+                                                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                                                 != PackageManager.PERMISSION_GRANTED &&
+                                                                 ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                                                                         != PackageManager.PERMISSION_GRANTED) {
+                                                             return;
+                                                         }
+
+                                                         Location location;
+                                                         double lat1, lon1, lat2, lon2, distance;
+                                                         int vibrationStrength;
+                                                         VibrationEffect pattern;
+                                                         Random carPosition = new Random();
+
+                                                         do{
+                                                             location = locationManager.getLastKnownLocation(provider);
+                                                             onLocationChanged(location);
+                                                             lat1 = location.getLatitude();
+                                                             lon1 = location.getLongitude();
+                                                             lat2 = lat1;
+                                                             //rangeMin + (rangeMax - rangeMin) * r.nextDouble(); Cambridge values
+                                                             lon2 = -71.2 + (0.2 * carPosition.nextDouble());
+
+                                                             distance = distance_to_vibration.distanceBetweenInFt(lat1, lon1, lat2, lon2);
+
+                                                             vibrationStrength = distance_to_vibration.vibration_strength(distance);
+                                                             pattern = VibrationEffect.createWaveform(new long[] {0, 1000}, new int[]{vibrationStrength,0}, -1);
+                                                             vibrator.vibrate(pattern);
+
+                                                        } while(distance_to_vibration.distanceBetweenInFt(lat1, lon1, lat2, lon2) > 2 || distance_to_vibration.distanceBetweenInFt(lat1, lon1, lat2, lon2) <= 30);
+
                                                      }
                                                  } else {
                                                      vibrator.vibrate(400);
@@ -54,15 +110,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                          }
         );
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(provider);
 
-        onLocationChanged(location);
     }
 
     @Override
