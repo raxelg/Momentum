@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                                              lon1 = location.getLongitude();
                                                              lat2 = lat1;
                                                              //rangeMin + (rangeMax - rangeMin) * r.nextDouble(); Cambridge values
-                                                             lon2 = -71.2 + (0.2 * carPosition.nextDouble());
+                                                             lon2 = -71.1 + (0.1 * carPosition.nextDouble());
 
                                                              distance = distance_to_vibration.distanceBetweenInFt(lat1, lon1, lat2, lon2);
 
