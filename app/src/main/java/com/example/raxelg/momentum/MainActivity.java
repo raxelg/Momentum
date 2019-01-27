@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         vibrationPower = distance_to_vibration.vibration_strength(results[0] * 3.28084);
                         vibrationTextView.setText(String.valueOf(vibrationPower));
 
-                        if((results[0]*3.28084) < 5 && (results[0]*3.28084) >= 0){
+                        if((results[0]*3.28084) < 5 && (results[0]*3.28084) > 2){
                             text = "You are within 5 feet";
                         } else if((results[0]*3.28084) >= 5 && (results[0]*3.28084) < 10){
                             text = "You are within 10 feet";
@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                             text = "You are within 30 feet";
                         } else if ((results[0]*3.28084) > 30){
                             text = "You are out of range";
+                        } else if((results[0]*3.28084) <= 2){
+                            text = "Reach out for the door. You have arrived";
                         }
 
                         Toast.makeText(getApplicationContext(), text,Toast.LENGTH_SHORT).show();
