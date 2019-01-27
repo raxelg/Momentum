@@ -25,14 +25,6 @@ public class distance_to_vibration {
                 * Math.sin(dLon / 2);
         double c = 2 * Math.asin(Math.sqrt(a));
         double valueResult = Radius * c* 3280.8399;
-        //double km = valueResult / 1;
-        //DecimalFormat newFormat = new DecimalFormat("####");
-        //int kmInDec = Integer.valueOf(newFormat.format(km));
-        //double meter = valueResult % 1000;
-        //int meterInDec = Integer.valueOf(newFormat.format(meter));
-        //Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-                //+ " Meter   " + meterInDec);
-
         return valueResult ;
     }
 
@@ -40,8 +32,24 @@ public class distance_to_vibration {
 
     public static int vibration_strength(double distance) {
 
-        return (int) ((-1 * distance * (255.0 / 30.0)) + 255);
+        //return (int) ((-1 * distance * (255.0 / 30.0)) + 255);
 
+        int vibrationStrength;
+
+        if(distance < 5 && distance >= 0){
+            vibrationStrength = 255;
+        } else if(distance >= 5 && distance < 10){
+            vibrationStrength = 204;
+        } else if(distance >= 10 && distance < 15){
+            vibrationStrength = 153;
+        } else if(distance >= 15 && distance < 20){
+            vibrationStrength = 102;
+        } else if (distance >= 20 && distance <= 30){
+            vibrationStrength = 51;
+        } else{
+            vibrationStrength = 0;
+        }
+        return vibrationStrength;
     }
 
 

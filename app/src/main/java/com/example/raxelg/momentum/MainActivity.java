@@ -92,13 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             if (vibrator.hasAmplitudeControl()) {
-                                if((results[0] * 3.28084) < 30) {
+
                                     VibrationEffect pattern = VibrationEffect.createWaveform(new long[]{1000, 2000}, new int[]{0, 0, distance_to_vibration.vibration_strength(results[0] * 3.28084)}, 1);
                                     vibrationTextView.setText(String.valueOf(vibrationPower));
                                     vibrator.vibrate(pattern);
-                                } else if((results[0] *3.28084) > 30 || (results[0] *3.28084) < 2 ){
-                                    vibrator.cancel();
-                                }
 
                             } else {
                                 vibrator.vibrate(VibrationEffect.createWaveform(new long[]{0, 4}, -1));
