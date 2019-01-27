@@ -23,6 +23,9 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import android.speech.tts.TextToSpeech;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,10 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean updatesOn = true;
     private TextView distanceTextView;
     private TextView vibrationTextView;
-    double lat2 = 42.355139;
-    double long2 = -1*71.1008134;
+    double lat2 = 42.3623315;
+    double long2 = -1*71.0976119;
     float [] results = new float[5];
     int vibrationPower;
+    private TextToSpeech t1;
+    private String text;
 
 
     @Override
@@ -78,6 +83,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        t1 = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    t1.setLanguage(Locale.UK);
+                }
+            }
+        });
+
+
         locationCallBack = new LocationCallback(){
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -89,6 +104,23 @@ public class MainActivity extends AppCompatActivity {
                         distanceTextView.setText("Distance: " + String.valueOf(results[0]*3.28084));
                         vibrationPower = distance_to_vibration.vibration_strength(results[0] * 3.28084);
                         vibrationTextView.setText(String.valueOf(vibrationPower));
+
+                        if((results[0]*3.28084) < 5 && (results[0]*3.28084) >= 0){
+                            text = "You are within 5 feet";
+                        } else if((results[0]*3.28084) >= 5 && (results[0]*3.28084) < 10){
+                            text = "You are within 10 feet";
+                        } else if((results[0]*3.28084) >= 10 && (results[0]*3.28084) < 15){
+                            text = "You are within 15 feet";
+                        } else if((results[0]*3.28084) >= 15 && (results[0]*3.28084) < 20){
+                            text = "You are within 20 feet";
+                        } else if ((results[0]*3.28084) >= 20 && (results[0]*3.28084) <= 30){
+                            text = "You are within 30 feet";
+                        } else if ((results[0]*3.28084) > 30){
+                            text = "You are out of range";
+                        }
+
+                        Toast.makeText(getApplicationContext(), text,Toast.LENGTH_SHORT).show();
+                        t1.speak(text,TextToSpeech.QUEUE_FLUSH, null, "range");
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             if (vibrator.hasAmplitudeControl()) {
@@ -140,5 +172,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
 }
