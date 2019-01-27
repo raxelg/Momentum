@@ -52,5 +52,26 @@ public class distance_to_vibration {
         return vibrationStrength;
     }
 
+    public static int frequency(double distance) {
+
+        //return (int) ((-1 * distance * (255.0 / 30.0)) + 255);
+
+        int frequency;
+
+        if(distance < 5 && distance >= 0){
+            frequency= 250;
+        } else if(distance >= 5 && distance < 10){
+            frequency = 500;
+        } else if(distance >= 10 && distance < 15){
+            frequency = 1000;
+        } else if(distance >= 15 && distance < 20){
+            frequency = 1500;
+        } else if (distance >= 20 && distance <= 30){
+            frequency = 2000;
+        } else{
+            frequency = 0;
+        }
+        return frequency;
+    }
 
 }
