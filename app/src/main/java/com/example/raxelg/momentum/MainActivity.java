@@ -173,6 +173,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        if(t1 != null){
+            t1.stop();
+            t1.shutdown();
+        }
+        super.onDestroy();
 
-
+    }
 }
