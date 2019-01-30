@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     int vibrationPower;
     private TextToSpeech t1;
     private String text;
+    float distance = 30;
 
 
     @Override
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         client = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(4000);
+        mLocationRequest.setFastestInterval(2000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
-                    t1.setLanguage(Locale.UK);
+                    t1.setLanguage(Locale.US);
                 }
             }
         });
@@ -99,25 +100,29 @@ public class MainActivity extends AppCompatActivity {
                 super.onLocationResult(locationResult);
                 for(Location location: locationResult.getLocations()){
                     if(location != null){
+
                         textView.setText("Longitude: " + String.valueOf(location.getLongitude()) + "\n" + "Latitude: " + String.valueOf(location.getLatitude()));
-                        location.distanceBetween(location.getLatitude(), location.getLongitude(), lat2,long2,results);
-                        distanceTextView.setText("Distance: " + String.valueOf(results[0]*3.28084));
-                        vibrationPower = distance_to_vibration.vibration_strength(results[0] * 3.28084);
+                        //location.distanceBetween(location.getLatitude(), location.getLongitude(), lat2,long2,results);
+                        distanceTextView.setText("Distance: " + distance);
+                        vibrationPower = distance_to_vibration.vibration_strength(distance);
                         vibrationTextView.setText(String.valueOf(vibrationPower));
 
-                        if((results[0]*3.28084) < 5 && (results[0]*3.28084) > 2){
-                            text = "You are within 5 feet";
-                        } else if((results[0]*3.28084) >= 5 && (results[0]*3.28084) < 10){
-                            text = "You are within 10 feet";
-                        } else if((results[0]*3.28084) >= 10 && (results[0]*3.28084) < 15){
-                            text = "You are within 15 feet";
-                        } else if((results[0]*3.28084) >= 15 && (results[0]*3.28084) < 20){
-                            text = "You are within 20 feet";
-                        } else if ((results[0]*3.28084) >= 20 && (results[0]*3.28084) <= 30){
+                        if(distance == 30){
                             text = "You are within 30 feet";
-                        } else if ((results[0]*3.28084) > 30){
-                            text = "You are out of range";
-                        } else if((results[0]*3.28084) <= 2){
+                            distance -= 10;
+                        } else if(distance == 20) {
+                            text = "You are within 20 feet";
+                            distance -= 5;
+                        }else if(distance == 15){
+                            text = "You are within 15 feet";
+                            distance -= 5;
+                        } else if(distance == 10){
+                            text = "You are within 10 feet.";
+                            distance -= 5;
+                        } else if (distance == 5){
+                            text = "You are within 5 feet.";
+                            distance -= 3;
+                        } else if (distance == 2){
                             text = "Reach out for the door. You have arrived";
                         }
 
@@ -134,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                                 vibrator.vibrate(VibrationEffect.createWaveform(new long[]{0, 4}, -1));
                             }
                         }
+
                     }
                 }
             }
