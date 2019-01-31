@@ -109,22 +109,19 @@ public class MainActivity extends AppCompatActivity {
 
                         if(distance == 30){
                             text = "You are within 30 feet";
-                            distance -= 10;
                         } else if(distance == 20) {
                             text = "You are within 20 feet";
-                            distance -= 5;
                         }else if(distance == 15){
                             text = "You are within 15 feet";
-                            distance -= 5;
                         } else if(distance == 10){
                             text = "You are within 10 feet.";
-                            distance -= 5;
                         } else if (distance == 5){
                             text = "You are within 5 feet.";
-                            distance -= 3;
-                        } else if (distance == 2){
+                        } else if (distance == 0){
                             text = "Reach out for the door. You have arrived";
                         }
+
+                        distance-=5;
 
                         Toast.makeText(getApplicationContext(), text,Toast.LENGTH_SHORT).show();
                         t1.speak(text,TextToSpeech.QUEUE_FLUSH, null, "range");
